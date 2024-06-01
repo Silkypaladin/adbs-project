@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
-import { Neo4jModule } from 'nest-neo4j';
+import neo4j from 'neo4j-driver';
 
 @Module({
-  imports: [
-    Neo4jModule.forRoot({
-      scheme: 'neo4j',
-      host: 'localhost',
-      port: 7687,
-      username: 'neo4j',
-      password: 'password',
-    }),
+  providers: [
+    {
+      provide: 'NEO4J_DRIVER',
+      useFactory: () => {
+        return neo4j.driver(
+          'bolt://localhost:7687',
+          neo4j.auth.basic('neo4j', 'password'),
+        );
+      },
+    },
   ],
+  exports: ['NEO4J_DRIVER'],
 })
-export class Neo4jAdbsModule {}
+export class Neo4jModule {}

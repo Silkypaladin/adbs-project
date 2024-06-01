@@ -1,5 +1,5 @@
 import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
-import { PostsService } from '../service/posts.service';
+import { PostsService } from './posts.service';
 
 @Controller('posts')
 export class PostsController {
