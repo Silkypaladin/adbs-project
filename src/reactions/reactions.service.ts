@@ -1,12 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Db, ObjectId } from 'mongodb';
+import { Injectable } from '@nestjs/common';
+import { ObjectId } from 'mongodb';
+import { MongoProvider } from '../database/mongo/mongo.provider';
 
 @Injectable()
 export class ReactionsService {
-  constructor(@Inject('DATABASE_CONNECTION') private db: Db) {}
+  constructor(private readonly mongoProvider: MongoProvider) {}
 
   async likePost(postId: string, userId: string) {
-    const result = await this.db.collection('reactions').insertOne({
+    const reactionsCollection = this.mongoProvider.getCollection('reactions');
+    const result = await reactionsCollection.insertOne({
       postId: new ObjectId(postId),
       userId: new ObjectId(userId),
       type: 'like',
@@ -16,7 +18,8 @@ export class ReactionsService {
   }
 
   async commentOnPost(postId: string, userId: string, content: string) {
-    const result = await this.db.collection('reactions').insertOne({
+    const reactionsCollection = this.mongoProvider.getCollection('reactions');
+    const result = await reactionsCollection.insertOne({
       postId: new ObjectId(postId),
       userId: new ObjectId(userId),
       type: 'comment',

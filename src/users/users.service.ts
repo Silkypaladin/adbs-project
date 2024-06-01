@@ -1,22 +1,22 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Db, ObjectId } from 'mongodb';
+import { Injectable } from '@nestjs/common';
+import { MongoProvider } from '../database/mongo/mongo.provider';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject('DATABASE_CONNECTION') private db: Db) {}
+  constructor(private readonly mongoProvider: MongoProvider) {}
 
   async createUser(username: string, email: string, password: string) {
-    const result = await this.db.collection('users').insertOne({
+    const usersCollection = this.mongoProvider.getCollection('users');
+    const result = await usersCollection.insertOne({
       username,
       email,
       password,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     return result.insertedId;
   }
 
-  async findUserById(id: string) {
-    return this.db.collection('users').findOne({ _id: new ObjectId(id) });
+  async findUserByUsername(username: string) {
+    const usersCollection = this.mongoProvider.getCollection('users');
+    return await usersCollection.findOne({ username });
   }
 }

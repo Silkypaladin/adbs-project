@@ -1,19 +1,22 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Db, ObjectId } from 'mongodb';
+import { Injectable } from '@nestjs/common';
+import { MongoProvider } from '../database/mongo/mongo.provider';
 
 @Injectable()
 export class PostsService {
-  constructor(@Inject('DATABASE_CONNECTION') private db: Db) {}
+  constructor(private readonly mongoProvider: MongoProvider) {}
 
-  async createPost(authorId: string, content: string) {
-    const result = await this.db.collection('posts').insertOne({
-      authorId: new ObjectId(authorId),
+  async createPost(userId: string, content: string) {
+    const postsCollection = this.mongoProvider.getCollection('posts');
+    const result = await postsCollection.insertOne({
+      userId,
       content,
       createdAt: new Date(),
-      updatedAt: new Date(),
     });
     return result.insertedId;
   }
 
-  // Inne metody CRUD dla postów...
+  async findPostsByUserId(userId: string) {
+    const postsCollection = this.mongoProvider.getCollection('posts');
+    return await postsCollection.find({ userId }).toArray();
+  }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { ReactionsService } from './reactions.service';
 
 @Controller('reactions')
@@ -19,11 +19,6 @@ export class ReactionsController {
     @Body('userId') userId: string,
     @Body('content') content: string,
   ) {
-    if (content.length > 144) {
-      throw new BadRequestException(
-        'Comment content must be 144 characters or less.',
-      );
-    }
     return this.reactionsService.commentOnPost(postId, userId, content);
   }
 }
