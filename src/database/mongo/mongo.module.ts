@@ -1,18 +1,28 @@
 import { Module } from '@nestjs/common';
-import { Db, MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
+import {
+  createPostsCollection,
+  createReactionsCollection,
+  createUsersCollection,
+} from './init';
 
 @Module({
   providers: [
     {
       provide: 'DATABASE_CONNECTION',
-      useFactory: async (): Promise<Db> => {
-        try {
-          const client = await MongoClient.connect('mongodb://127.0.0.1');
+      useFactory: async () => {
+        const client = new MongoClient('mongodb://localhost:27017');
+        await client.connect();
+        const db = client.db('social-network');
 
-          return client.db('adbs-mongo-db');
-        } catch (e) {
-          throw e;
+        try {
+          await createUsersCollection(db);
+          await createPostsCollection(db);
+          await createReactionsCollection(db);
+        } catch (err) {
+          if (err.codeName !== 'NamespaceExists') throw err;
         }
+        return db;
       },
     },
   ],
