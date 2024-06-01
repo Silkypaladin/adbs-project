@@ -1,4 +1,4 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
@@ -10,11 +10,11 @@ export class PostsController {
     @Body('authorId') authorId: string,
     @Body('content') content: string,
   ) {
-    if (content.length < 1 || content.length > 144) {
-      throw new BadRequestException(
-        'Content must be between 1 and 144 characters.',
-      );
-    }
     return this.postsService.createPost(authorId, content);
+  }
+
+  @Get(':userId')
+  async getAllUserPosts(@Param('id') id: string) {
+    return this.postsService.findPostsByUserId(id);
   }
 }

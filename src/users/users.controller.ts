@@ -8,10 +8,11 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { ObjectId } from "mongodb";
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
   @Post()
   async createUser(
@@ -24,14 +25,14 @@ export class UsersController {
   ) {
     const { username, email, password } = createUserDto;
     try {
-      const userId = await this.usersService.createUser(
+      const userId: string = await this.usersService.createUser(
         username,
         email,
         password,
       );
       return { userId };
     } catch (err) {
-      console.log(err);
+      console.log(`${err}`)
       throw new HttpException('User creation failed', HttpStatus.BAD_REQUEST);
     }
   }
