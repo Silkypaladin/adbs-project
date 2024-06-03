@@ -18,13 +18,17 @@ export class MongoProvider implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     this.client = new MongoClient('mongodb://localhost:27017');
     await this.client.connect();
-    this.db = this.client.db('social-network');
+    this.db = this.client.db('adbs');
     await this.initializeCollections();
     await this.createIndexes();
   }
 
   async onModuleDestroy() {
     await this.client.close();
+  }
+
+  startSession() {
+    return this.client.startSession();
   }
 
   getCollection(name: string) {

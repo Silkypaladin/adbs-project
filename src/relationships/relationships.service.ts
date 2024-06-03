@@ -1,9 +1,31 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Driver } from 'neo4j-driver';
+import { Driver, Session, Transaction } from "neo4j-driver";
 
 @Injectable()
 export class RelationshipsService {
   constructor(@Inject('NEO4J_DRIVER') private driver: Driver) {}
+
+  async createUserNodeWithTransaction(transaction: Transaction, userId: string, username: string) {
+    const query = `
+      CREATE (u:User {id: $userId, username: $username})
+      RETURN u
+    `;
+    await transaction.run(query, { userId, username });
+  }
+
+  async createUserNode(userId: string, username: string) {
+    const session = this.driver.session();
+    const query = `
+      CREATE (u:User {id: $userId, username: $username})
+      RETURN u
+    `;
+    try {
+      const result = await session.run(query, { userId, username});
+      return result.records[0].get('u').properties;
+    } finally {
+      await session.close();
+    }
+  }
 
   async sendFriendRequest(fromUserId: string, toUserId: string) {
     const session = this.driver.session();
