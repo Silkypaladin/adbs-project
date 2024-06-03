@@ -1,10 +1,13 @@
-import { Injectable, } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 import { MongoProvider } from '../database/mongo/mongo.provider';
-import { RelationshipsService } from "../relationships/relationships.service";
+import { RelationshipsService } from '../relationships/relationships.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private mongoProvider: MongoProvider, private relationshipsService: RelationshipsService) {}
+  constructor(
+    private mongoProvider: MongoProvider,
+    private relationshipsService: RelationshipsService,
+  ) {}
 
   async createUser(username: string, email: string, password: string) {
     const usersCollection = this.mongoProvider.getCollection('users');
@@ -14,7 +17,7 @@ export class UsersService {
       password,
     });
 
-    const userId = result.insertedId.toString()
+    const userId = result.insertedId.toString();
 
     await this.relationshipsService.createUserNode(userId, username);
 
