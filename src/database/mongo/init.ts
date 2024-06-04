@@ -9,28 +9,26 @@ export async function createUsersCollection(db: Db) {
         properties: {
           username: {
             bsonType: 'string',
-            description: 'must be a string and is required',
+            description:
+              'username is required and has to be between 5 and 20 characters',
             minLength: 5,
             maxLength: 20,
           },
           email: {
             bsonType: 'string',
-            description: 'must be a string and match the email pattern',
+            description: 'email is required and has to match email pattern',
             pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$',
           },
           password: {
             bsonType: 'string',
-            description: 'must be a string and is required',
+            description:
+              'password is required and has to be between 10 and 30 characters',
             minLength: 10,
             maxLength: 30,
           },
           createdAt: {
             bsonType: 'date',
-            description: 'must be a date and is required',
-          },
-          updatedAt: {
-            bsonType: 'date',
-            description: 'must be a date and is required',
+            description: 'createdAt is required and must be a date',
           },
         },
       },
@@ -43,25 +41,22 @@ export async function createPostsCollection(db: Db) {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['authorId', 'content', 'createdAt', 'updatedAt'],
+        required: ['authorId', 'content', 'createdAt'],
         properties: {
           authorId: {
             bsonType: 'objectId',
-            description: 'must be an objectId and is required',
+            description: 'authorId is required and has to be ObjectId',
           },
           content: {
             bsonType: 'string',
-            description: 'must be a string and is required',
+            description:
+              'content is required and has to be between 1 and 144 characters',
             minLength: 1,
             maxLength: 144,
           },
           createdAt: {
             bsonType: 'date',
-            description: 'must be a date and is required',
-          },
-          updatedAt: {
-            bsonType: 'date',
-            description: 'must be a date and is required',
+            description: 'createdAt is required and must be a date',
           },
         },
       },
@@ -78,24 +73,26 @@ export async function createReactionsCollection(db: Db) {
         properties: {
           postId: {
             bsonType: 'objectId',
-            description: 'must be an objectId and is required',
+            description: 'postId is required and has to be ObjectId',
           },
           userId: {
             bsonType: 'objectId',
-            description: 'must be an objectId and is required',
+            description: 'userId is required and has to be ObjectId',
           },
           type: {
             enum: ['like', 'comment'],
-            description: 'can only be one of the enum values and is required',
+            description: 'type is required and has to be "like" or "comment"',
           },
           content: {
             bsonType: 'string',
-            description: 'required if type is comment and max length is 144',
+            description:
+              'content is required and has to be between 1 and 144 characters',
+            minLength: 1,
             maxLength: 144,
           },
           createdAt: {
             bsonType: 'date',
-            description: 'must be a date and is required',
+            description: 'createdAt is required and must be a date',
           },
         },
       },

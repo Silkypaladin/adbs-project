@@ -1,0 +1,67 @@
+GET http://127.0.0.1:3000
+
+### Create user 1
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{ "username" : "szymonb", "password": "legialegia", "email": "szymonb@wp.pl" }
+
+### Create user 2
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{ "username" : "piotrr", "password": "legialegia", "email": "piotrr@wp.pl" }
+
+### Create user 3
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{ "username" : "filipk", "password": "legialegia", "email": "filip4@wp.pl" }
+
+### User 1 invites user 2 to be friends
+POST http://localhost:3000/relationships/send-friend-request
+Content-Type: application/json
+
+{
+  "fromUserId": "665f6e8a2e8cefb0795087a1",
+  "toUserId": "665f6e8d2e8cefb0795087a2"
+}
+
+### User 2 invites user 3 to be friends
+POST http://localhost:3000/relationships/send-friend-request
+Content-Type: application/json
+
+{
+  "fromUserId": "665f6e8d2e8cefb0795087a2",
+  "toUserId": "665f6e912e8cefb0795087a3"
+}
+
+### Check if user 1 has any suggested friends
+GET http://localhost:3000/relationships/suggest-friends/665f6e8a2e8cefb0795087a1
+
+### User 2 accepts user 1 friend request
+POST http://localhost:3000/relationships/accept-friend-request
+Content-Type: application/json
+
+{
+  "fromUserId": "665f6e8a2e8cefb0795087a1",
+  "toUserId": "665f6e8d2e8cefb0795087a2"
+}
+
+### User 3 accepts user 2 friend request
+POST http://localhost:3000/relationships/accept-friend-request
+Content-Type: application/json
+
+{
+  "fromUserId": "665f6e8d2e8cefb0795087a2",
+  "toUserId": "665f6e912e8cefb0795087a3"
+}
+
+### Check if user 1 has any suggested friends
+GET http://localhost:3000/relationships/suggest-friends/665f6e8a2e8cefb0795087a1
+
+### Check if user 3 has any suggested friends
+GET http://localhost:3000/relationships/suggest-friends/665f6e912e8cefb0795087a3
+
+### Get user 2 friends
+GET http://localhost:3000/relationships/user-friends/665f6e8d2e8cefb0795087a2
