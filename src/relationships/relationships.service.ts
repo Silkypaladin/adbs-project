@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Driver, Session, Transaction } from "neo4j-driver";
+import { Driver, Transaction } from "neo4j-driver";
 
 @Injectable()
 export class RelationshipsService {
