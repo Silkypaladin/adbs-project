@@ -5,6 +5,19 @@ import { RelationshipsService } from './relationships.service';
 export class RelationshipsController {
   constructor(private readonly relationshipsService: RelationshipsService) {}
 
+  @Post('follow')
+  async followUser(
+    @Body('followerUserId') followerUserId: string,
+    @Body('followeeUserId') followeeUserId: string,
+  ) {
+    return this.relationshipsService.follow(followerUserId, followeeUserId);
+  }
+
+  @Get('followees')
+  async getFollowees(@Param('userId') userId: string) {
+    return this.relationshipsService.getFollowees(userId);
+  }
+
   @Post('send-friend-request')
   async sendFriendRequest(
     @Body() sendFriendRequestDto: { fromUserId: string; toUserId: string },
