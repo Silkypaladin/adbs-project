@@ -38,8 +38,13 @@ export class RelationshipsController {
     );
   }
 
+  @Get('user-friends/:userId')
+  async getMyFriends(@Param('userId') userId: string) {
+    return await this.relationshipsService.getUserFriends(userId);
+  }
+
   @Get('suggest-friends/:userId')
   async suggestFriends(@Param('userId') userId: string) {
-    return await this.relationshipsService.suggestFriends(userId);
+    return await this.relationshipsService.getSuggestedFriends(userId);
   }
 }

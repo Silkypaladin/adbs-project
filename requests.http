@@ -1,7 +1,0 @@
-GET http://127.0.0.1:3000
-
-###
-POST http://localhost:3000/users
-Content-Type: application/json
-
-{ "username" : "szymonggfgfgf55", "password": "legialegia", "email": "szymogfn55gfgfg@wp.pl" }
