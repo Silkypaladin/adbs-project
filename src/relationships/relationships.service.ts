@@ -19,6 +19,41 @@ export class RelationshipsService {
     }
   }
 
+  async follow(followerUserId: string, followeeUserId: string) {
+    const session = this.driver.session();
+    const query = `
+      MATCH (follower:User {id: $followerId}), (followee:User {id: $followeeId})
+      MERGE (follower)-[:FOLLOWS]->(followee)
+      RETURN follower, followee
+    `;
+    try {
+      const result = await session.run(query, {
+        followerUserId,
+        followeeUserId,
+      });
+      return {
+        follower: result.records[0].get('follower').properties,
+        followee: result.records[0].get('followee').properties,
+      };
+    } finally {
+      await session.close();
+    }
+  }
+
+  async getFollowees(userId: string) {
+    const session = this.driver.session();
+    const query = `
+      MATCH (u:User {id: $userId})-[:FOLLOWS]->(followee:User)
+      RETURN followee
+    `;
+    try {
+      const result = await session.run(query, { userId });
+      return result.records.map((record) => record.get('followee').properties);
+    } finally {
+      await session.close();
+    }
+  }
+
   async sendFriendRequest(fromUserId: string, toUserId: string) {
     const session = this.driver.session();
     const query = `
