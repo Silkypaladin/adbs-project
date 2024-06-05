@@ -13,8 +13,30 @@ export class PostsController {
     return this.postsService.createPost(authorId, content);
   }
 
+  @Post(':postId/comment')
+  async addComment(
+    @Param('postId') postId: string,
+    @Body('userId') userId: string,
+    @Body('content') content: string,
+  ) {
+    return this.postsService.addComment(postId, userId, content);
+  }
+
+  @Post(':postId/like')
+  async addLike(
+    @Param('postId') postId: string,
+    @Body('userId') userId: string,
+  ) {
+    return this.postsService.addLike(postId, userId);
+  }
+
   @Get(':userId')
-  async getAllUserPosts(@Param('id') id: string) {
-    return this.postsService.findPostsByUserId(id);
+  async getAllUserPosts(@Param('userId') userId: string) {
+    return this.postsService.findPostsByUserId(userId);
+  }
+
+  @Get('reactions/:userId')
+  async getUserReactions(@Param('userId') userId: string) {
+    return this.postsService.findReactionsByUserId(userId);
   }
 }

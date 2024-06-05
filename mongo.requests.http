@@ -1,0 +1,77 @@
+### Create user 1
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{ "username" : "szymonb", "password": "legialegia", "email": "szymonb@wp.pl" }
+
+### Create user 2
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{ "username" : "piotrr", "password": "legialegia", "email": "piotrr@wp.pl" }
+
+### Create user 3
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{ "username" : "filipk", "password": "legialegia", "email": "filip4@wp.pl" }
+
+### User 1 creates post 1
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{ "authorId": "USER1_ID", "content": "This is the first post by user1" }
+
+### User 1 creates post 2
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{ "authorId": "6660b27be1e48a77df54bb47", "content": "This is the second post by user1" }
+
+### User 2 creates post
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{ "authorId": "USER2_ID", "content": "This is a post by user2" }
+
+### User 1 comments on their own post
+POST http://localhost:3000/posts/POST1_ID/comment
+Content-Type: application/json
+
+{ "userId": "USER1_ID", "content": "This is a comment by user1 on their own post" }
+
+### User 1 likes and comments on post by user2
+POST http://localhost:3000/posts/POST3_ID/like
+Content-Type: application/json
+
+{ "userId": "USER1_ID" }
+
+###
+POST http://localhost:3000/posts/POST3_ID/comment
+Content-Type: application/json
+
+{ "userId": "USER1_ID", "content": "This is a comment by user1 on user2's post" }
+
+### User 3 likes and comments on post by user2
+POST http://localhost:3000/posts/POST3_ID/like
+Content-Type: application/json
+
+{ "userId": "USER3_ID" }
+
+###
+POST http://localhost:3000/posts/POST3_ID/comment
+Content-Type: application/json
+
+{ "userId": "USER3_ID", "content": "This is a comment by user3 on user2's post" }
+
+### User 3 likes post by user1
+POST http://localhost:3000/posts/POST1_ID/like
+Content-Type: application/json
+
+{ "userId": "USER3_ID" }
+
+### Get all posts by user 1
+GET http://localhost:3000/posts/USER1_ID
+
+### Get all reactions by user 3
+GET http://localhost:3000/posts/reactions/USER3_ID

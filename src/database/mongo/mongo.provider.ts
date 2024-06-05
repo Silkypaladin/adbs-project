@@ -1,10 +1,6 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { Db, MongoClient } from 'mongodb';
-import {
-  createPostsCollection,
-  createReactionsCollection,
-  createUsersCollection,
-} from './init';
+import { Db, MongoClient, Collection } from 'mongodb';
+import { createPostsCollection, createUsersCollection } from './init';
 
 @Injectable()
 export class MongoProvider implements OnModuleInit, OnModuleDestroy {
@@ -27,15 +23,14 @@ export class MongoProvider implements OnModuleInit, OnModuleDestroy {
     return this.client.startSession();
   }
 
-  getCollection(name: string) {
-    return this.db.collection(name);
+  getCollection<T = any>(name: string): Collection<T> {
+    return this.db.collection<T>(name);
   }
 
   private async initializeCollections() {
     try {
       await createUsersCollection(this.db);
       await createPostsCollection(this.db);
-      await createReactionsCollection(this.db);
     } catch (err) {
       if (err.codeName !== 'NamespaceExists') throw err;
     }
@@ -49,9 +44,5 @@ export class MongoProvider implements OnModuleInit, OnModuleDestroy {
     const postsCollection = this.getCollection('posts');
     await postsCollection.createIndex({ userId: 1 });
     await postsCollection.createIndex({ createdAt: 1 });
-
-    const reactionsCollection = this.getCollection('reactions');
-    await reactionsCollection.createIndex({ postId: 1 });
-    await reactionsCollection.createIndex({ userId: 1 });
   }
 }
