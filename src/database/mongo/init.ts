@@ -58,41 +58,34 @@ export async function createPostsCollection(db: Db) {
             bsonType: 'date',
             description: 'createdAt is required and must be a date',
           },
-        },
-      },
-    },
-  });
-}
-
-export async function createReactionsCollection(db: Db) {
-  return db.createCollection('reactions', {
-    validator: {
-      $jsonSchema: {
-        bsonType: 'object',
-        required: ['postId', 'userId', 'type', 'createdAt'],
-        properties: {
-          postId: {
-            bsonType: 'objectId',
-            description: 'postId is required and has to be ObjectId',
-          },
-          userId: {
-            bsonType: 'objectId',
-            description: 'userId is required and has to be ObjectId',
-          },
-          type: {
-            enum: ['like', 'comment'],
-            description: 'type is required and has to be "like" or "comment"',
-          },
-          content: {
-            bsonType: 'string',
-            description:
-              'content is required and has to be between 1 and 144 characters',
-            minLength: 1,
-            maxLength: 144,
-          },
-          createdAt: {
-            bsonType: 'date',
-            description: 'createdAt is required and must be a date',
+          reactions: {
+            bsonType: 'array',
+            description: 'must be an array of reactions',
+            items: {
+              bsonType: 'object',
+              required: ['userId', 'type', 'createdAt'],
+              properties: {
+                userId: {
+                  bsonType: 'objectId',
+                  description: 'userId is required and has to be ObjectId',
+                },
+                type: {
+                  enum: ['like', 'comment'],
+                  description: 'type is required and has to be "like" or "comment"',
+                },
+                content: {
+                  bsonType: 'string',
+                  description:
+                    'content is required if type is comment and has to be between 1 and 144 characters',
+                  minLength: 1,
+                  maxLength: 144,
+                },
+                createdAt: {
+                  bsonType: 'date',
+                  description: 'createdAt is required and must be a date',
+                },
+              },
+            },
           },
         },
       },
