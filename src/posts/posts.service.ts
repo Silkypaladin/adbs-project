@@ -79,17 +79,26 @@ export class PostsService {
 
   async findReactionsByUserId(userId: string) {
     const postsCollection = this.mongoProvider.getCollection<Post>('posts');
-    const posts = await postsCollection
-      .find({
-        'reactions.userId': new ObjectId(userId),
-      })
-      .toArray();
+    const userIdObject = new ObjectId(userId);
+
+    const pipeline = [
+      { $unwind: '$reactions' },
+      { $match: { 'reactions.userId': userIdObject } },
+      { $sort: { 'reactions.createdAt': -1 } },
+      {
+        $group: {
+          _id: '$_id',
+          postId: { $first: '$_id' },
+          reactions: { $push: '$reactions' },
+        },
+      },
+    ];
+
+    const posts = await postsCollection.aggregate(pipeline).toArray();
 
     return posts.map((post) => ({
-      postId: post._id,
-      reactions: post.reactions.filter((reaction) =>
-        reaction.userId.equals(new ObjectId(userId)),
-      ),
+      postId: post.postId,
+      reactions: post.reactions,
     }));
   }
 }
