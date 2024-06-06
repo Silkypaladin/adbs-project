@@ -42,7 +42,10 @@ export class MongoProvider implements OnModuleInit, OnModuleDestroy {
     await usersCollection.createIndex({ email: 1 }, { unique: true });
 
     const postsCollection = this.getCollection('posts');
-    await postsCollection.createIndex({ userId: 1 });
-    await postsCollection.createIndex({ createdAt: 1 });
+    await postsCollection.createIndex({ authorId: 1, createdAt: -1 });
+    await postsCollection.createIndex({
+      'reactions.userId': 1,
+      'reactions.createdAt': -1,
+    });
   }
 }
