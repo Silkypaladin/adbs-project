@@ -4,27 +4,27 @@ GET http://127.0.0.1:3000
 POST http://localhost:3000/users
 Content-Type: application/json
 
-{ "username" : "szymonb", "password": "legialegia", "email": "szymonb@wp.pl" }
+{ "username" : "szymonb", "password": "password", "email": "szymonb@wp.pl" }
 
 ### Create user 2
 POST http://localhost:3000/users
 Content-Type: application/json
 
-{ "username" : "piotrr", "password": "legialegia", "email": "piotrr@wp.pl" }
+{ "username" : "piotrr", "password": "password", "email": "piotrr@wp.pl" }
 
 ### Create user 3
 POST http://localhost:3000/users
 Content-Type: application/json
 
-{ "username" : "filipk", "password": "legialegia", "email": "filip4@wp.pl" }
+{ "username" : "filipk", "password": "password", "email": "filip4@wp.pl" }
 
 ### User 1 invites user 2 to be friends
 POST http://localhost:3000/relationships/send-friend-request
 Content-Type: application/json
 
 {
-  "fromUserId": "665f6e8a2e8cefb0795087a1",
-  "toUserId": "665f6e8d2e8cefb0795087a2"
+  "fromUserId": "USER1_ID",
+  "toUserId": "USER2_ID"
 }
 
 ### User 2 invites user 3 to be friends
@@ -32,20 +32,20 @@ POST http://localhost:3000/relationships/send-friend-request
 Content-Type: application/json
 
 {
-  "fromUserId": "665f6e8d2e8cefb0795087a2",
-  "toUserId": "665f6e912e8cefb0795087a3"
+  "fromUserId": "USER2_ID",
+  "toUserId": "USER3_ID"
 }
 
 ### Check if user 1 has any suggested friends
-GET http://localhost:3000/relationships/suggest-friends/665f6e8a2e8cefb0795087a1
+GET http://localhost:3000/relationships/suggest-friends/USER1_ID
 
 ### User 2 accepts user 1 friend request
 POST http://localhost:3000/relationships/accept-friend-request
 Content-Type: application/json
 
 {
-  "fromUserId": "665f6e8a2e8cefb0795087a1",
-  "toUserId": "665f6e8d2e8cefb0795087a2"
+  "fromUserId": "USER2_ID",
+  "toUserId": "USER1_ID"
 }
 
 ### User 3 accepts user 2 friend request
@@ -53,15 +53,15 @@ POST http://localhost:3000/relationships/accept-friend-request
 Content-Type: application/json
 
 {
-  "fromUserId": "665f6e8d2e8cefb0795087a2",
-  "toUserId": "665f6e912e8cefb0795087a3"
+  "fromUserId": "USER3_ID",
+  "toUserId": "USER2_ID"
 }
 
 ### Check if user 1 has any suggested friends
-GET http://localhost:3000/relationships/suggest-friends/665f6e8a2e8cefb0795087a1
+GET http://localhost:3000/relationships/suggest-friends/USER1_ID
 
 ### Check if user 3 has any suggested friends
-GET http://localhost:3000/relationships/suggest-friends/665f6e912e8cefb0795087a3
+GET http://localhost:3000/relationships/suggest-friends/USER3_ID
 
 ### Get user 2 friends
-GET http://localhost:3000/relationships/user-friends/665f6e8d2e8cefb0795087a2
+GET http://localhost:3000/relationships/user-friends/USER2_ID
