@@ -2,19 +2,19 @@
 POST http://localhost:3000/users
 Content-Type: application/json
 
-{ "username" : "szymonb", "password": "legialegia", "email": "szymonb@wp.pl" }
+{ "username" : "szymonb", "password": "password", "email": "szymonb@wp.pl" }
 
 ### Create user 2
 POST http://localhost:3000/users
 Content-Type: application/json
 
-{ "username" : "piotrr", "password": "legialegia", "email": "piotrr@wp.pl" }
+{ "username" : "piotrr", "password": "password", "email": "piotrr@wp.pl" }
 
 ### Create user 3
 POST http://localhost:3000/users
 Content-Type: application/json
 
-{ "username" : "filipk", "password": "legialegia", "email": "filip4@wp.pl" }
+{ "username" : "filipk", "password": "password", "email": "filip4@wp.pl" }
 
 ### User 1 creates post 1
 POST http://localhost:3000/posts
